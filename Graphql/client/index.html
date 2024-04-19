@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consume GraphQL</title>
+  <!-- Incluye la biblioteca graphql-request -->
+  <script src="https://cdn.jsdelivr.net/npm/graphql-request@2.0.0-alpha-0/dist/graphql-request.min.js"></script>
+</head>
+
+<body>
+  <button onclick="getCourses();">Get Courses</button>
+  <button onclick="getTeachers();">Get Teachers</button>
+  <h3>Results:</h3>
+  <div id="result"></div>
+
+  <script>
+    // URL de tu servidor GraphQL
+    const graphqlEndpoint = 'http://localhost:4000/graphql';
+
+    // Función para obtener la lista de cursos
+    async function getCourses() {
+      const query = `{
+        courses {
+          id
+          title
+        }
+      }`;
+
+      try {
+        const data = await request(graphqlEndpoint, query);
+        displayResult(data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    }
+
+    // Función para obtener la lista de profesores
+    async function getTeachers() {
+      const query = `{
+        teachers {
+          id
+          name
+        }
+      }`;
+
+      try {
+        const data = await request(graphqlEndpoint, query);
+        displayResult(data);
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      }
+    }
+
+    // Función para mostrar el resultado en la página
+    function displayResult(data) {
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = JSON.stringify(data, null, 2);
+    }
+
+    // Función para realizar la solicitud GraphQL
+    async function request(endpoint, query) {
+      const response = await graphqlRequest(endpoint, query);
+      return response;
+    }
+  </script>
+</body>
+
+</html>
